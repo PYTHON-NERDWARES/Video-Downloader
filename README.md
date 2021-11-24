@@ -11,4 +11,10 @@
 
 [Software Requirements](https://github.com/PYTHON-NERDWARES/Video-Downloader/blob/main/Requirements.md)
 
-![Wireframe1]('assets/Wireframe1.jpg')
+## Wireframe :
+
+![Wireframe1](assets/Wireframe1.jpg)
+
+![Wireframe2](assets/Wireframe2.jpg)
+
+![Wireframe3](assets/Wireframe3.jpg)
