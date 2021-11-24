@@ -18,3 +18,7 @@
 ![Wireframe2](assets/Wireframe2.jpg)
 
 ![Wireframe3](assets/Wireframe3.jpg)
+
+## Domain Modeling:
+
+![Domain Modeling](assets/DomainModeling.png)
