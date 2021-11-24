@@ -10,3 +10,5 @@
 [Team Agreement](https://github.com/amman-401-python/401-project/blob/main/TeamAgreement.md)
 
 [Software Requirements](https://github.com/PYTHON-NERDWARES/Video-Downloader/blob/main/Requirements.md)
+
+![Wireframe1]('assets/Wireframe1.jpg')
