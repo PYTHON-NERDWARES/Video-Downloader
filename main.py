@@ -5,7 +5,7 @@ from pytube import YouTube
 import _thread
 import os
 
-storagePath = r"C:\Users\STUDENT\Documents\Downloads\Vide_Downloader"
+storagePath = r"C:\Users\eslam\Documents\Downloads\Vide_Downloader"
 
 # main window
 root = Tk()
@@ -97,7 +97,6 @@ def download_page():
     widget.pack()
     widget.bind('<Button-1>', pro)
 
- # YouTube.thumbnail_url
 
 Button(root, text="DOWNLOAD", fg="white", bg="#E21717", width=17, height=2, command=download_page).pack()
 
