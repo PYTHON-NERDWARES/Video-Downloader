@@ -1,5 +1,6 @@
 from tkinter import *
 import os
+from moviepy.editor import *
 import tkinter
 
 # playlist = os.fspath(storagePath)
@@ -11,55 +12,42 @@ playlist = os.listdir(storagePath)
 print(playlist)
 
 top1 = Tk()
+Label(top1, text="Video Downloaded Media", font="arial 20 bold").pack()
 lb = Listbox(top1)
 for i,video in enumerate(playlist):
     lb.insert(i,video)
+    lb.pack()
+    clip = VideoFileClip(video)
 
-lb.insert(1, "Bangalore")
-lb.insert(2, "Mysore")
-lb.insert(3, "Mangalore")
-lb.insert(4, "Hubli")
-lb.insert(5, "Dharwad")
-lb.insert(6, "Belgaum")
-lb.pack()
+    # clipping of the video
+    # getting video for only starting 10 seconds
+    clip = clip.subclip(0, 10)
+
+    # rotating video by 180 degree
+    clip = clip.rotate(180)
+
+    # Reduce the audio volume (volume x 0.5)
+    clip = clip.volumex(0.5)
+
+    # showing clip
+    clip.ipython_display(width=280)
 top1.mainloop()
 
+###  delete video:
+import os
+
+# File name
+# file = 'file1.txt'
+#
+# # File location
+# location = "D:/Pycharm projects/GeeksforGeeks/Authors/Nikhil/"
+#
+# # Path
+# path = os.path.join(location, file)
+#
+# # Remove the file
+# # 'file.txt'
+# os.remove(path)
+# size = os.path.getsize("filename")
 
 
-# size = os.path.getsize()
-# print(size)
-
-
-# # search
-# # from tkinter import *
-# import pytube
-#
-# root = Tk()
-#
-# from pytube import *
-# import urllib.request
-# import requests
-# import re
-#
-# Label(root, text="", font='arial 15 bold').pack()
-# link = StringVar(root)
-# link_entry = Entry(root, textvariable=link, width=40).pack()
-#
-# # ******************************
-# # https://www.youtube.com/results?search_query=mozart
-# search_keyword = "Physics Explained in Ten Seconds"
-# main_search_keyword = search_keyword.replace(' ','')
-# html = urllib.request.urlopen("https://www.youtube.com/results?search_query="+main_search_keyword)
-# video_ids = re.findall(r"watch\?v=(\S{11})",html.read().decode())
-# print(video_ids)
-# print("https://www.youtube.com/watch?v="+video_ids[0])
-# # ******************************
-#         # watch_url = "https://www.youtube.com/watch?v="+video_ids[0]
-#         # get_info = pytube.extract.video_info_url(video_ids[0],watch_url)
-#         # print(get_info)
-#
-# thumbnail_url = 'https://img.youtube.com/vi/'+video_ids[0]+'/maxresdefault.jpg'
-#
-# r = requests.get(thumbnail_url)
-# with open(video_ids[0] +'.jpg','wb') as f:
-#       f.write(r.content)
