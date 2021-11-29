@@ -1,12 +1,10 @@
 import time
 from tkinter import *
-
 import pytube.extract
 from moviepy.editor import *
 from tkinter import messagebox, ttk
 from pytube import *
 import _thread
-
 from cefpython3 import cefpython as cef
 import ctypes
 
@@ -18,7 +16,7 @@ import sys
 import os
 import platform
 import logging as _logging
-import timeit
+from tkhtmlview import HTMLLabel
 
 storagePath = r"C:\Users\STUDENT\Documents\Downloads\Vide_Downloader"
 
@@ -73,17 +71,18 @@ ytbchoices.pack()
 
 live_download = 0
 speed = 1
+
+
 def show_progress_bar(stream, chunk, bytes_remaining):
-    global live_download,speed
+    global live_download, speed
     progress = float(
         (float(stream.filesize - bytes_remaining) / float(stream.filesize)) * float(100))
     GB = 100
     while (live_download < progress):
         time.sleep(0.05)
-        bar["value"] += (speed/GB)*100
+        bar["value"] += (speed / GB) * 100
         live_download += speed
-        msg3['text'] = str(int(live_download))+'%  Downloaded'
-
+        msg3['text'] = str(int(live_download)) + '%  Downloaded'
 
 
 # msg
@@ -94,7 +93,6 @@ msg2 = Label(frame2, font="arial 12", fg="green")
 msg2.pack()
 msg3 = Label(frame2, font="arial 12", fg="green")
 msg3.pack()
-
 
 
 def download():
@@ -109,7 +107,7 @@ def download():
 
             if quality == choices[0]:
                 stream = video.last()
-                msg2['text'] = 'FileSize : ' + str(round(stream.filesize/ (1024 * 1024))) + 'MB'
+                msg2['text'] = 'FileSize : ' + str(round(stream.filesize / (1024 * 1024))) + 'MB'
                 video.last().download(storagePath)
             elif quality == choices[1]:
                 stream = video.first()
@@ -252,7 +250,7 @@ def pre_view(event=None):
                     window_info.SetAsChild(self.winfo_id(), rect)
                     # https://youtu.be/adJFT6_j9Uk?list=LL
                     self.browser = cef.CreateBrowserSync(window_info,
-                                                         url=f"http://youtube.com/embed/{id}?rel=0&loop=1")
+                                                         url=f"http://youtube.com/embed/{id}?rel=0")
                     assert self.browser
                     self.browser.SetClientHandler(LoadHandler(self))
                     # self.browser.SetClientHandler(FocusHandler(self))
@@ -345,6 +343,7 @@ def pre_view(event=None):
             pre_frame_flag = False
             pre_view()
     except:
+        raise Exception
         messagebox.showinfo('Error', "Please Enter a YouTube URL")
 
 
@@ -355,7 +354,69 @@ view_Button.place(x=750, y=60)
 Button(frame1, text="DOWNLOAD", fg="white", bg="#E21717", width=17, height=2, command=download_page).pack()
 link_entry.bind('<Return>', pre_view)
 
+# https://youtu.be/adJFT6_j9Uk?list=LL
+
+import urllib.request
+import requests
+import re
+
+search_link = StringVar()
+search_entry = Entry(frame3, textvariable=search_link, width=50, font=12)
+search_entry.pack(pady=13)
+
+from PIL import ImageTk, Image
+import datetime
+
+
+
+scrollbar = Scrollbar(frame3)
+scrollbar.pack(side=RIGHT, fill=Y)
+mylist = Listbox(frame3, yscrollcommand=scrollbar.set)
+mylist.place(x=0, y=50)
+scrollbar.config(command=mylist.yview)
+
+def search(e=None):
+    search_keyword = search_link.get()
+    main_search_keyword = search_keyword.replace(' ', '')
+    html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + main_search_keyword)
+    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+    #############################################################################################
+
+    # for line in range(100):
+    #     mylist.insert(END, "This is line number " + str(line))
+
+    for video in video_ids:
+        # mylist.insert(Label(mylist,text='ddddd7dddddd'))
+        mylist.insert(END, "This is line number " )
+        item_frame = Frame(mylist, bg="white", width=450, height=110)
+        # item_frame.pack(fill='both', expand=True)
+        watch_url = "https://www.youtube.com/watch?v=" + video
+        yt = YouTube(watch_url)
+        img = yt.thumbnail_url
+        img_lable = HTMLLabel(item_frame, html=f"<img width='200' height='100' src ='{img}'>",width=40 ,height=7)
+        img_lable.place(x=0, y=0)
+        title = yt.title
+        rating = yt.rating
+        rate= round(rating, 1)
+        length = yt.length
+        length_min = str(datetime.timedelta(seconds=length))
+        # # add data
+        title_lable = Label(item_frame, text=f'{title}\nRating: {rate}\nLength: {length_min}', wraplength=240, justify='left')
+        title_lable.place(x=210, y=10)
+        review_Button = Button(item_frame, text="Review", font="arial 9", fg="white",
+                               bg="green", width=10, command=lambda: _thread.start_new_thread(search, ()))
+        review_Button.place(x=365, y=70)
+
+
+search_Button = Button(frame3, text="Search", font="arial 10", fg="white",
+                       bg="green", width=10, command=lambda: _thread.start_new_thread(search, ()))
+search_Button.place(x=750, y=10)
+
+
+
+
+
 root.mainloop()
 cef.Shutdown()
 
-# https://youtu.be/adJFT6_j9Uk?list=LL
+

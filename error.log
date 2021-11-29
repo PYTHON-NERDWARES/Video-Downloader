@@ -1,0 +1,16 @@
+
+[2021-11-28 20:07:10] Traceback (most recent call last):
+  File "C:\Users\STUDENT\PycharmProjects\Video-Downloader\main.py", line 583, in <module>
+    root.mainloop()
+  File "C:\Users\STUDENT\AppData\Local\Programs\Python\Python39\lib\tkinter\__init__.py", line 1429, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt
+
+
+[2021-11-28 20:11:29] Traceback (most recent call last):
+  File "C:\Users\STUDENT\PycharmProjects\Video-Downloader\main.py", line 583, in <module>
+    root.mainloop()
+  File "C:\Users\STUDENT\AppData\Local\Programs\Python\Python39\lib\tkinter\__init__.py", line 1429, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt
+
