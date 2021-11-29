@@ -101,6 +101,7 @@ def download():
         url = link.get()
         if len(url) > 0:
             msg['text'] = 'Extracting video from youtube...'
+            widget["state"]="disabled"
             ytb_url = YouTube(url, on_progress_callback=show_progress_bar)
             video = ytb_url.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc()
             msg["text"] = "Downloading " + ytb_url.title
@@ -130,6 +131,7 @@ def download():
             notebook.select(frame1)
     except:
         messagebox.showinfo('Error', "Please Enter a YouTube URL")
+        widget["state"] = "normal"
 
 
 def download_page():
@@ -147,6 +149,7 @@ bar.pack(pady=10)
 widget = Button(frame2, text="DOWNLOAD", fg="white", bg="#E21717", width=17, height=2,
                 command=lambda: _thread.start_new_thread(download, ()))
 widget.pack()
+
 
 # Review
 
@@ -354,13 +357,12 @@ view_Button = Button(frame1, text="Review", font="arial 12", fg="white",
                      bg="green", width=10, height=1, command=lambda: pre_view())
 view_Button.place(x=750, y=60)
 
-Button(frame1, text="DOWNLOAD", fg="white", bg="#E21717", width=17, height=2, command=download_page).pack()
+Button(frame1, text="DOWNLOAD PAGE", fg="white", bg="#E21717", width=17, height=2, command=download_page).pack()
 link_entry.bind('<Return>', pre_view)
 
 # https://youtu.be/adJFT6_j9Uk?list=LL
 
 import urllib.request
-import requests
 import re
 
 search_link = StringVar()
@@ -373,23 +375,21 @@ import datetime
 
 searched_flag = False
 
-pre_frame3 =None
 def search():
     global searched_flag, canvas1, scroll
 
     if not searched_flag:
-        canvas2 = Canvas(frame3, bg='red', width=740, height=550)
-        canvas2.create_window((1, 1), window=pre_frame2, anchor='nw')
-        canvas2.place(x=460, y=50)
+        canvas2 = Canvas(frame3, width=740, height=550)
+        canvas2.create_window((0, 0), window=pre_frame2, anchor='nw')
+        canvas2.pack(fill=BOTH, expand=True)
 
         canvas1 = Canvas(frame3, width=460, height=550)
-        scroll = Scrollbar(frame3, orient=VERTICAL, command=canvas1.yview)
+        scroll = Scrollbar(canvas2, orient=VERTICAL, command=canvas1.yview)
         scroll.pack(side=RIGHT, fill=Y)
         canvas1.configure(yscrollcommand=scroll.set)
         search_list_frame = Frame(canvas1)
         canvas1.create_window((0, 0), window=search_list_frame, anchor='nw')
         canvas1.place(x=0, y=50)
-
 
 
         searched_flag = True
@@ -407,18 +407,17 @@ def search():
                 item_frame.pack(fill='both', expand=True)
                 watch_url = "https://www.youtube.com/watch?v=" + video
 
-                def search_view(search_link=watch_url): ############################## 
+                def search_view(search_link=watch_url): ##############################
                     try:
                         global pre_frame_flag, pre_frame2
                         if pre_frame_flag == False:
                             url = search_link
+                            print(url)
                             id = pytube.extract.video_id(url)
                             pre_frame_flag = True
                             global is_run, saved_link
-                            pre_frame2 = Frame(canvas2, bg='blue')
-                            # pre_frame2.pack(fill=BOTH, expand=True)
-                            pre_frame3 = Frame(pre_frame2 ,width=400 ,height=200,fill=BOTH, expand=True)
-                            pre_frame3.pack()
+                            pre_frame2 = Frame(canvas2)
+                            pre_frame2.pack(fill=BOTH, expand=True)
 
                             WindowUtils = cef.WindowUtils()
 
@@ -439,7 +438,7 @@ def search():
 
                                     self.browser_frame = None
                                     self.navigation_bar = None
-                                    self.old_frame = None
+
 
                                     tk.Grid.rowconfigure(root, 0, weight=1)
                                     tk.Grid.columnconfigure(root, 0, weight=1)
@@ -456,7 +455,7 @@ def search():
 
                                     # Pack MainFrame
 
-                                    self.pack(fill=tk.BOTH, expand=tk.YES)
+                                    self.pack(fill=BOTH, expand=True)
 
                                 def on_root_configure(self, _):
                                     logger.debug("MainFrame.on_root_configure")
@@ -500,7 +499,7 @@ def search():
 
                                 def embed_browser(self):
                                     window_info = cef.WindowInfo()
-                                    rect = [0, 0, 1000, 600]
+                                    rect = [460, 10, 1160, 500]
                                     window_info.SetAsChild(self.winfo_id(), rect)
                                     # https://youtu.be/adJFT6_j9Uk?list=LL
                                     self.browser = cef.CreateBrowserSync(window_info,
@@ -573,9 +572,9 @@ def search():
                                     if self.browser_frame.master.navigation_bar:
                                         self.browser_frame.master.navigation_bar.set_url(browser.GetUrl())
 
-                            if not is_run or link.get() != saved_link:
+                            if not is_run :
                                 is_run = True
-                                saved_link = link.get()
+                                # saved_link = link.get()
                                 logger.setLevel(_logging.INFO)
                                 stream_handler = _logging.StreamHandler()
                                 formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -588,21 +587,24 @@ def search():
                                 assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
                                 sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
 
-                                MainFrame(pre_frame3)
+                                MainFrame(pre_frame2)
+
+
                                 # Tk must be initialized before CEF otherwise fatal error (Issue #306)
                                 cef.Initialize()
 
                         else:
                             pre_frame2.pack_forget()
                             pre_frame_flag = False
-                            search_view(search_link=watch_url)
+                            is_run = False
+                            search_view(search_link)
+
                     except:
                         raise Exception
                         messagebox.showinfo('Error', "Please Enter a YouTube URL")
 
                 ############################################################
 
-                # url_arr.append(watch_url)
                 yt = YouTube(watch_url)
                 img = yt.thumbnail_url
                 img_lable = HTMLLabel(item_frame, html=f"<img width='200' height='100' src ='{img}'>", width=40,
@@ -838,4 +840,5 @@ MP3Player(frame4)
 
 root.mainloop()
 cef.Shutdown()
+
 
