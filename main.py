@@ -139,7 +139,8 @@ def download():
                 os.remove(video_path)
             msg["text"] = "Downloaded Successfully"
             widget["state"] = "normal"
-            x.mp3()
+            player.mp3()
+            player.mp4()
 
             messagebox.showinfo("Download info", "Downloaded Successfully and saved to\n" + storagePath)
         else:
@@ -658,9 +659,7 @@ search_Button.place(x=750, y=10)
 
 # playlist
 
-from tkinter import simpledialog
-from tkVideoPlayer import TkinterVideo
-from pyffmpeg import FFmpeg
+
 
 #####################################################################
 
@@ -771,7 +770,9 @@ class MP3Player:
         self.playlist.bind("<<ListboxSelect>>", list1)
         self.mp3()
         # Changing Directory for fetching Songs
+
     def mp3(self):
+        self.playlist.delete(0, END)
         os.chdir(storagePath)
         # Fetching Songs
         MP3tracks = os.listdir()
@@ -780,6 +781,7 @@ class MP3Player:
             if track.endswith('.mp3'):
                 self.playlist.insert(END, track)
         # ******************  MP4 *********************************************
+
         MP4frame = LabelFrame(self.root, text="Videos list", font=("times new roman", 15, "bold"), bg="grey",
                               fg="white",
                               bd=5, relief=GROOVE)
@@ -798,6 +800,10 @@ class MP3Player:
         scrol_y.config(command=self.playlist2.yview)
         self.playlist2.pack(fill=BOTH, expand=True)
         self.playlist2.bind("<<ListboxSelect>>", list2)
+        self.mp4()
+
+    def mp4(self):
+        self.playlist2.delete(0, END)
         # Changing Directory for fetching Songs
         os.chdir(storagePath)
         # Fetching Songs
@@ -866,7 +872,7 @@ class MP3Player:
 
 
 # Passing Root to MusicPlayer Class
-x = MP3Player(frame4)
+player= MP3Player(frame4)
 # Root Window Looping
 
 
