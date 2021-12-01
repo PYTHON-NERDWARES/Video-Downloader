@@ -13,12 +13,12 @@
 
 ## Wireframe :
 
-![Wireframe1](assets/Wireframe1.jpg)
+![Wireframe1](assets/Wireframe/Wireframe1.jpg)
 
-![Wireframe2](assets/Wireframe2.jpg)
+![Wireframe2](assets/Wireframe/Wireframe2.jpg)
 
-![Wireframe3](assets/Wireframe3.jpg)
+![Wireframe3](assets/Wireframe/Wireframe3.jpg)
 
 ## Domain Modeling:
 
-![Domain Modeling](assets/DomainModeling.png)
+![Domain Modeling](assets/Wireframe/DomainModeling.png)
