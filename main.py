@@ -810,7 +810,7 @@ class MP3Player:
         MP4tracks = os.listdir()
         # Inserting Songs into Playlist
         for track in MP4tracks:
-            if not track.endswith('.mp3'):
+            if track.endswith('.mp4'):
                self.playlist2.insert(END, track)
 
     def playsong(self):
