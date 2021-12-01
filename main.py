@@ -24,7 +24,7 @@ storagePath = r"C:\Users\STUDENT\Documents\Downloads\Vide_Downloader"
 
 # main window
 root = Tk()
-root.title("Youtube Downloader")
+root.title("Youtube Downloader    V.1.0")
 root.geometry('1200x600')
 root.resizable(0, 0)
 root.iconbitmap('assets/img/logologo (1).ico')
@@ -71,21 +71,25 @@ ytbchoices = ttk.Combobox(frame2, width=50, values=choices, font='arial 12 bold'
 ytbchoices.current(0)
 ytbchoices.pack()
 
+
+# progress bar
+bar = ttk.Progressbar(frame2, length=600)
+
 live_download = 0
 speed = 1
 
 
 def show_progress_bar(stream, chunk, bytes_remaining):
     global live_download, speed
+    if live_download == 100:
+        live_download = 0
     progress = float(
         (float(stream.filesize - bytes_remaining) / float(stream.filesize)) * float(100))
-
     while live_download < progress:
         time.sleep(0.05)
-        bar["value"] += (speed / 100) * 100
+        bar["value"] += speed
         live_download += speed
         msg3['text'] = str(int(live_download)) + '%  Downloaded'
-
 
 # msg
 
@@ -95,11 +99,13 @@ msg2 = Label(frame2, font="arial 12", fg="green")
 msg2.pack()
 msg3 = Label(frame2, font="arial 12", fg="green")
 msg3.pack()
+msg4 = HTMLLabel(frame2, html=f"<img width='800' height='350' src =''>", width=800, height=350)
 
 
 
 def search_download(preview_link):
     global link
+
     notebook.select(frame2)
     link.set(preview_link)
 
@@ -107,6 +113,12 @@ def search_download(preview_link):
 def download():
     try:
         global msg4
+        bar["value"] = 0
+        msg3['text'] = ""
+        msg["text"] = ""
+        msg2['text'] = ""
+        msg4.place_forget()
+        bar.pack_forget()
         quality = ytbchoices.get()
         url = link.get()
         if len(url) > 0:
@@ -115,8 +127,9 @@ def download():
             ytb_url = YouTube(url, on_progress_callback=show_progress_bar)
             video = ytb_url.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc()
             msg["text"] = "Downloading " + ytb_url.title
+            bar.pack(pady=10)
             img = ytb_url.thumbnail_url
-            msg4 = HTMLLabel(frame2, html=f"<img width='800' height='350' src ='{img}'>", width=800,height=350)
+            msg4 = HTMLLabel(frame2, html=f"<img width='800' height='350' src ='{img}'>", width=800, height=350)
             msg4.place(x=200, y=250)
 
             if quality == choices[0]:
@@ -160,9 +173,7 @@ def download_page():
         notebook.select(frame2)
 
 
-# progress bar
-bar = ttk.Progressbar(frame2, length=600)
-bar.pack(pady=10)
+
 
 widget = Button(frame2, text="DOWNLOAD", fg="white", bg="#E21717", width=17, height=2,
                 command=lambda: _thread.start_new_thread(download, ()))
@@ -810,7 +821,7 @@ class MP3Player:
         MP4tracks = os.listdir()
         # Inserting Songs into Playlist
         for track in MP4tracks:
-            if not track.endswith('.mp3'):
+            if track.endswith('.mp4'):
                self.playlist2.insert(END, track)
 
     def playsong(self):
