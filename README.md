@@ -13,7 +13,7 @@
 
 ## Project images :
 
-![main page](assets/Wireframe/main page.JPG)
+![main page](assets/Wireframe/main_page.JPG)
 
 ![download page](assets/Wireframe/download_page.JPG)
 
