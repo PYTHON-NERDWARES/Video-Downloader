@@ -11,6 +11,15 @@
 
 [Software Requirements](https://github.com/PYTHON-NERDWARES/Video-Downloader/blob/main/Requirements.md)
 
+## Project images :
+
+![main page](assets/Wireframe/main page.JPG)
+
+![download page](assets/Wireframe/download_page.JPG)
+
+![search pagee](assets/Wireframe/search_page.JPG)
+
+![search pagee](assets/Wireframe/download_page.JPG)
 ## Wireframe :
 
 ![Wireframe1](assets/Wireframe/Wireframe1.jpg)
